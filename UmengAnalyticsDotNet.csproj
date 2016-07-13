@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{86E5CF07-2D19-4401-8411-A8CA444C3974}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <AssemblyName>UmengAnalyticsDotNet</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows" />
+    <Reference Include="Microsoft.Phone" />
+    <Reference Include="System" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml.Serialization" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ABCDStruct.cs" />
+    <Compile Include="MD5Core.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UmengClassLibrary.UmengSDK.Model\ISessionIdentity.cs" />
+    <Compile Include="UmengSDK.Business\AutoCachingDecorator.cs" />
+    <Compile Include="UmengSDK.Business\BodyPersistentManager.cs" />
+    <Compile Include="UmengSDK.Business\HttpWebRequestState.cs" />
+    <Compile Include="UmengSDK.Business\ITracker.cs" />
+    <Compile Include="UmengSDK.Business\Manager.cs" />
+    <Compile Include="UmengSDK.Business\MessageBuilder.cs" />
+    <Compile Include="UmengSDK.Business\MessageType.cs" />
+    <Compile Include="UmengSDK.Business\NetTask.cs" />
+    <Compile Include="UmengSDK.Business\OnlineConfigManager.cs" />
+    <Compile Include="UmengSDK.Business\OnlineParam.cs" />
+    <Compile Include="UmengSDK.Business\OnlineParamManager.cs" />
+    <Compile Include="UmengSDK.Business\PeriodicReportProxy.cs" />
+    <Compile Include="UmengSDK.Business\UmengTracker.cs" />
+    <Compile Include="UmengSDK.Business\UpdateManager.cs" />
+    <Compile Include="UmengSDK.Common\AppInfo.cs" />
+    <Compile Include="UmengSDK.Common\Constants.cs" />
+    <Compile Include="UmengSDK.Common\DebugUtil.cs" />
+    <Compile Include="UmengSDK.Common\ExtensionMethods.cs" />
+    <Compile Include="UmengSDK.Common\IsoPersistentHelper.cs" />
+    <Compile Include="UmengSDK.Common\JSON.cs" />
+    <Compile Include="UmengSDK.Common\SerializableDictionary.cs" />
+    <Compile Include="UmengSDK.Common\UmengSettings.cs" />
+    <Compile Include="UmengSDK.Model\Body.cs" />
+    <Compile Include="UmengSDK.Model\EKV.cs" />
+    <Compile Include="UmengSDK.Model\Error.cs" />
+    <Compile Include="UmengSDK.Model\Event.cs" />
+    <Compile Include="UmengSDK.Model\Gender.cs" />
+    <Compile Include="UmengSDK.Model\Header.cs" />
+    <Compile Include="UmengSDK.Model\Hub.cs" />
+    <Compile Include="UmengSDK.Model\Launch.cs" />
+    <Compile Include="UmengSDK.Model\Terminate.cs" />
+    <Compile Include="UmengSDK.Model\Time.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\Adler.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\BlockState.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\CompressionLevel.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\CompressionMode.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\CompressionStrategy.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\CRC32.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\CrcCalculatorStream.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\DeflateFlavor.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\DeflateManager.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\FlushType.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\GZipStream.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\InflateBlocks.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\InflateCodes.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\InflateManager.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\InfTree.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\InternalConstants.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\InternalInflateConstants.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\SharedUtils.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\StaticTree.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\Tree.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\ZlibBaseStream.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\ZlibCodec.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\ZlibConstants.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\ZlibException.cs" />
+    <Compile Include="UmengSDK.Third.Gzip\ZlibStreamFlavor.cs" />
+    <Compile Include="UmengSDK\OnlineParamEventArgs.cs" />
+    <Compile Include="UmengSDK\ReportPolicy.cs" />
+    <Compile Include="UmengSDK\UmengAnalytics.cs" />
+    <Compile Include="UmengSDK\UpdateEventArgs.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
