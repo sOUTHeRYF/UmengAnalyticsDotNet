@@ -13,14 +13,14 @@ namespace UmengSDK.Common
 		{
 			XmlSerializer xmlSerializer = new XmlSerializer(typeof(TKey));
 			XmlSerializer xmlSerializer2 = new XmlSerializer(typeof(TValue));
-			for (int i = 0; i < base.get_Count(); i++)
+			for (int i = 0; i < base.Count; i++)
 			{
 				write.WriteStartElement("SerializableDictionary");
 				write.WriteStartElement("key");
-				xmlSerializer.Serialize(write, Enumerable.ElementAt<KeyValuePair<TKey, TValue>>(this, i).get_Key());
+				xmlSerializer.Serialize(write, this.ElementAt<KeyValuePair<TKey, TValue>>(i).Key);
 				write.WriteEndElement();
 				write.WriteStartElement("value");
-				xmlSerializer2.Serialize(write, Enumerable.ElementAt<KeyValuePair<TKey, TValue>>(this, i).get_Value());
+				xmlSerializer2.Serialize(write, this.ElementAt<KeyValuePair<TKey, TValue>>(i).Value);
 				write.WriteEndElement();
 				write.WriteEndElement();
 			}
@@ -31,7 +31,7 @@ namespace UmengSDK.Common
 			reader.Read();
 			XmlSerializer xmlSerializer = new XmlSerializer(typeof(TKey));
 			XmlSerializer xmlSerializer2 = new XmlSerializer(typeof(TValue));
-			while (reader.get_NodeType() != 15)
+			while ((int)reader.NodeType != 15)
 			{
 				reader.ReadStartElement("SerializableDictionary");
 				reader.ReadStartElement("key");

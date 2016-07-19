@@ -1035,7 +1035,7 @@ namespace UmengSDK.Third.Gzip
 				short[] expr_161_cp_0 = s.bl_count;
 				int expr_161_cp_1 = i;
 				expr_161_cp_0[expr_161_cp_1] -= 1;
-				s.bl_count[i + 1] = s.bl_count[i + 1] + 2;
+				s.bl_count[i + 1] =(short)( s.bl_count[i + 1] + 2);
 				short[] expr_195_cp_0 = s.bl_count;
 				int expr_195_cp_1 = maxLength;
 				expr_195_cp_0[expr_195_cp_1] -= 1;
@@ -1107,7 +1107,7 @@ namespace UmengSDK.Third.Gzip
 				int num3 = s.heap[1];
 				s.heap[--s.heap_max] = i;
 				s.heap[--s.heap_max] = num3;
-				array[num2 * 2] = array[i * 2] + array[num3 * 2];
+				array[num2 * 2] = (short)(array[i * 2] + array[num3 * 2]);
 				s.depth[num2] = (sbyte)(Math.Max((byte)s.depth[i], (byte)s.depth[num3]) + 1);
 				array[i * 2 + 1] = (array[num3 * 2 + 1] = (short)num2);
 				s.heap[1] = num2++;
@@ -1136,7 +1136,7 @@ namespace UmengSDK.Third.Gzip
 					short[] expr_4B_cp_0 = array;
 					int expr_4B_cp_1 = num2;
 					short code;
-					expr_4B_cp_0[expr_4B_cp_1] = (code = expr_4B_cp_0[expr_4B_cp_1]) + 1;
+					expr_4B_cp_0[expr_4B_cp_1] = (code = (short)((expr_4B_cp_0[expr_4B_cp_1]) + 1));
 					tree[arg_66_1] = (short)Tree.bi_reverse((int)code, num2);
 				}
 			}

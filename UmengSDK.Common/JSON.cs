@@ -115,7 +115,7 @@ namespace UmengSDK.Common
 						success = false;
 						return null;
 					}
-					dictionary.set_Item(text, obj);
+					dictionary[text] = obj;
 				}
 			}
 			return dictionary;
@@ -242,8 +242,8 @@ namespace UmengSDK.Common
 						{
 							break;
 						}
-						uint num2;
-						if (!(success = uint.TryParse(new string(json, index, 4), 515, CultureInfo.get_InvariantCulture(), ref num2)))
+						uint num2 = 0;
+						if (!(success = uint.TryParse(new string(json, index, 4), System.Globalization.NumberStyles.HexNumber, CultureInfo.InvariantCulture, out num2)))
 						{
 							return "";
 						}
@@ -273,11 +273,11 @@ namespace UmengSDK.Common
 			double num3 = 0.0;
 			int num4 = 0;
 			new string(json, index, num);
-			success = long.TryParse(new string(json, index, num), 511, CultureInfo.get_InvariantCulture(), ref num2);
+			success = long.TryParse(new string(json, index, num), System.Globalization.NumberStyles.Any , CultureInfo.InvariantCulture, out num2);
 			if (!success)
 			{
 				num4++;
-				success = double.TryParse(new string(json, index, num), 511, CultureInfo.get_InvariantCulture(), ref num3);
+				success = double.TryParse(new string(json, index, num), System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out num3);
 			}
 			index = lastIndexOfNumber + 1;
 			switch (num4)
@@ -456,9 +456,9 @@ namespace UmengSDK.Common
 			{
 				while (enumerator.MoveNext())
 				{
-					KeyValuePair<string, object> current = enumerator.get_Current();
-					string key = current.get_Key();
-					object value = current.get_Value();
+					KeyValuePair<string, object> current = enumerator.Current;
+					string key = current.Key;
+					object value = current.Value;
 					if (!flag)
 					{
 						builder.Append(", ");
@@ -480,9 +480,9 @@ namespace UmengSDK.Common
 		{
 			builder.Append("[");
 			bool flag = true;
-			for (int i = 0; i < anArray.get_Count(); i++)
+			for (int i = 0; i < anArray.Count; i++)
 			{
-				object value = anArray.get_Item(i);
+				object value = anArray[i];
 				if (!flag)
 				{
 					builder.Append(", ");
@@ -555,13 +555,13 @@ namespace UmengSDK.Common
 
 		protected static bool SerializeDoubleNumber(double number, StringBuilder builder)
 		{
-			builder.Append(Convert.ToString(number, CultureInfo.get_InvariantCulture()));
+			builder.Append(Convert.ToString(number, CultureInfo.InvariantCulture));
 			return true;
 		}
 
 		protected static bool SerializeNumber(ValueType number, StringBuilder builder)
 		{
-			builder.Append(Convert.ToString(number, CultureInfo.get_InvariantCulture()));
+			builder.Append(Convert.ToString(number, CultureInfo.InvariantCulture));
 			return true;
 		}
 	}

@@ -30,7 +30,7 @@ namespace UmengSDK.Model
 			}
 			if (this.hub.ContainsKey(key))
 			{
-				this.hub.set_Item(key, value);
+				this.hub[key] = value;
 				return;
 			}
 			this.hub.Add(key, value);
@@ -40,7 +40,7 @@ namespace UmengSDK.Model
 		{
 			if (this.hub.ContainsKey(key))
 			{
-				return this.hub.get_Item(key);
+				return this.hub[key];
 			}
 			return null;
 		}

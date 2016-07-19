@@ -33,23 +33,23 @@ namespace UmengSDK.Model
 		{
 			id = id.CheckInput(this.MAX_LENGTH_64);
 			base.put(this.KEY_EVENT_ID, id);
-			base.put(this.KEY_TIMESTAMP, (long)DateTime.get_Now().Subtract(Constants.UTC).get_TotalSeconds());
+			base.put(this.KEY_TIMESTAMP, (long)DateTime.Now.Subtract(Constants.UTC).TotalSeconds);
 			int num = 0;
 			using (Dictionary<string, string>.Enumerator enumerator = kv.GetEnumerator())
 			{
 				while (enumerator.MoveNext())
 				{
-					KeyValuePair<string, string> current = enumerator.get_Current();
+					KeyValuePair<string, string> current = enumerator.Current;
 					num++;
 					if (num > 10)
 					{
 						break;
 					}
-					string text = current.get_Key();
+					string text = current.Key;
 					text = text.CheckInput(this.MAX_LENGTH_64);
-					string text2 = current.get_Value();
-					int num2;
-					if (current.get_Key() == "__ct__" && int.TryParse(current.get_Value(), ref num2))
+					string text2 = current.Value;
+					int num2 = 0;
+					if (current.Key == "__ct__" && int.TryParse(current.Value, out num2))
 					{
 						base.put(text, num2);
 					}
@@ -66,20 +66,20 @@ namespace UmengSDK.Model
 		{
 			if (dic.ContainsKey(this.KEY_EVENT_ID))
 			{
-				base.put(this.KEY_EVENT_ID, dic.get_Item(this.KEY_EVENT_ID) as string);
+				base.put(this.KEY_EVENT_ID, dic[this.KEY_EVENT_ID] as string);
 				dic.Remove(this.KEY_EVENT_ID);
 			}
 			if (dic.ContainsKey(this.KEY_DURATION))
 			{
-				base.put(this.KEY_DURATION, (long)dic.get_Item(this.KEY_DURATION));
+				base.put(this.KEY_DURATION, (long)dic[this.KEY_DURATION]);
 				dic.Remove(this.KEY_DURATION);
 			}
 			if (dic.ContainsKey(this.KEY_TIMESTAMP))
 			{
-				base.put(this.KEY_TIMESTAMP, (long)dic.get_Item(this.KEY_TIMESTAMP));
+				base.put(this.KEY_TIMESTAMP, (long)dic[this.KEY_TIMESTAMP]);
 				dic.Remove(this.KEY_TIMESTAMP);
 			}
-			if (dic.get_Count() > 0)
+			if (dic.Count > 0)
 			{
 				this.kv = dic;
 			}

@@ -9,7 +9,7 @@ namespace UmengSDK.Common
 			string text = s;
 			try
 			{
-				if (!string.IsNullOrEmpty(text) && text.get_Length() > maxLength)
+				if (!string.IsNullOrEmpty(text) && text.Length > maxLength)
 				{
 					string text2 = text;
 					text = text.Substring(0, maxLength);

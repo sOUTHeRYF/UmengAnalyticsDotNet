@@ -1,4 +1,4 @@
-using Microsoft.Phone.Net.NetworkInformation;
+//using Microsoft.Phone.Net.NetworkInformation;
 using System;
 using System.Threading;
 using UmengSDK.Common;
@@ -128,8 +128,8 @@ namespace UmengSDK.Business
 
 		private bool CanReport()
 		{
-			bool isNetworkAvailable = DeviceNetworkInformation.get_IsNetworkAvailable();
-			bool flag = (DateTime.get_Now() - this._lastReportTime).get_TotalSeconds() >= this._interval;
+            bool isNetworkAvailable = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+            bool flag = (DateTime.Now - this._lastReportTime).TotalSeconds >= this._interval;
 			return isNetworkAvailable && flag && !this._isReporting;
 		}
 
@@ -142,7 +142,7 @@ namespace UmengSDK.Business
 				{
 					try
 					{
-						DebugUtil.Log("Periodic Report at " + DateTime.get_Now(), "udebug----------->");
+						DebugUtil.Log("Periodic Report at " + DateTime.Now, "udebug----------->");
 						if (this._tracker.DataBody.IsSessionReady)
 						{
 							if (this.IsSendLocal)
@@ -172,7 +172,7 @@ namespace UmengSDK.Business
 				});
 				return;
 			}
-			DebugUtil.Log("Check Periodic Report at " + DateTime.get_Now(), "udebug----------->");
+			DebugUtil.Log("Check Periodic Report at " + DateTime.Now, "udebug----------->");
 		}
 
 		private void OnReportCompleted(string response)
@@ -182,14 +182,14 @@ namespace UmengSDK.Business
 				if (!string.IsNullOrEmpty(response))
 				{
 					this._sendingBody = null;
-					this._lastReportTime = DateTime.get_Now();
+					this._lastReportTime = DateTime.Now;
 					UmengSettings.Put("LastReportTime", this._lastReportTime);
 					DebugUtil.Log("Periodic Report successed : " + this._lastReportTime, "udebug----------->");
 				}
 				else
 				{
 					BodyPersistentManager.Current.Save(this._sendingBody);
-					DebugUtil.Log("Periodic Report failed : " + DateTime.get_Now(), "udebug----------->");
+					DebugUtil.Log("Periodic Report failed : " + DateTime.Now, "udebug----------->");
 				}
 			}
 			catch (Exception e)

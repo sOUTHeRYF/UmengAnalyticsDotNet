@@ -14,7 +14,7 @@ namespace UmengSDK.Business
 
 		private const string KEY_PARAMS = "online_params";
 
-		private static IsolatedStorageSettings _isoSettings = IsolatedStorageSettings.get_ApplicationSettings();
+	//	private static IsolatedStorageSettings _isoSettings = IsolatedStorageSettings.get_ApplicationSettings();
 
 		public OnlineParamManager.UpdateCompletedHandler UpdateCompletedEvent;
 
@@ -61,7 +61,7 @@ namespace UmengSDK.Business
 				if (result != null)
 				{
 					Dictionary<string, object> dictionary = (Dictionary<string, object>)JSON.JsonDecode(result);
-					if (dictionary.ContainsKey("config_update") && "no".Equals(dictionary.get_Item("config_update").ToString().ToLower()))
+					if (dictionary.ContainsKey("config_update") && "no".Equals(dictionary[ "config_update"].ToString().ToLower()))
 					{
 						DebugUtil.Log("has no online params update", "udebug----------->");
 					}
@@ -71,7 +71,7 @@ namespace UmengSDK.Business
 						{
 							try
 							{
-								DebugUtil.Log(JSON.JsonEncode(dictionary.get_Item("online_params") as Dictionary<string, object>), "udebug----------->");
+								DebugUtil.Log(JSON.JsonEncode(dictionary["online_params"] as Dictionary<string, object>), "udebug----------->");
 							}
 							catch
 							{
@@ -79,13 +79,13 @@ namespace UmengSDK.Business
 							lock (this)
 							{
 								this._onlineParam.Params.Clear();
-								Dictionary<string, object> dictionary2 = dictionary.get_Item("online_params") as Dictionary<string, object>;
+								Dictionary<string, object> dictionary2 = dictionary["online_params"] as Dictionary<string, object>;
 								using (Dictionary<string, object>.Enumerator enumerator = dictionary2.GetEnumerator())
 								{
 									while (enumerator.MoveNext())
 									{
-										KeyValuePair<string, object> current = enumerator.get_Current();
-										this._onlineParam.Params.Add(current.get_Key(), current.get_Value() as string);
+										KeyValuePair<string, object> current = enumerator.Current;
+										this._onlineParam.Params.Add(current.Key, current.Value as string);
 									}
 								}
 								this.SaveFile();
@@ -111,6 +111,8 @@ namespace UmengSDK.Business
 
 		private void SaveFile()
 		{
+            //todo
+            /*
 			try
 			{
 				lock (this)
@@ -130,11 +132,14 @@ namespace UmengSDK.Business
 			{
 				DebugUtil.Log("error in Save online params", e);
 			}
+            */
 		}
 
 		private bool LoadFile()
 		{
-			bool result;
+            //todo
+            bool result = false;
+            /*
 			try
 			{
 				lock (this)
@@ -151,6 +156,7 @@ namespace UmengSDK.Business
 				DebugUtil.Log("load online params from local failed!", e);
 				result = false;
 			}
+            */
 			return result;
 		}
 
@@ -160,7 +166,7 @@ namespace UmengSDK.Business
 			{
 				if (this._onlineParam.Params != null && this._onlineParam.Params.ContainsKey(key))
 				{
-					return this._onlineParam.Params.get_Item(key);
+					return this._onlineParam.Params[key];
 				}
 			}
 			catch (Exception e)

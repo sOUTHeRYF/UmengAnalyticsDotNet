@@ -146,7 +146,7 @@ namespace UmengSDK.Third.Gzip
 				{
 					throw new ObjectDisposedException("GZipStream");
 				}
-				return this._baseStream._stream.get_CanRead();
+				return this._baseStream._stream.CanRead;
 			}
 		}
 
@@ -166,7 +166,7 @@ namespace UmengSDK.Third.Gzip
 				{
 					throw new ObjectDisposedException("GZipStream");
 				}
-				return this._baseStream._stream.get_CanWrite();
+				return this._baseStream._stream.CanWrite;
 			}
 		}
 
@@ -309,11 +309,11 @@ namespace UmengSDK.Third.Gzip
 				b ^= 8;
 			}
 			array3[num4++] = b;
-			if (!this.LastModified.get_HasValue())
+			if (!this.LastModified.HasValue)
 			{
-				this.LastModified = new DateTime?(DateTime.get_Now());
+				this.LastModified = new DateTime?(DateTime.Now);
 			}
-			int num5 = (int)(this.LastModified.get_Value() - GZipStream._unixEpoch).get_TotalSeconds();
+			int num5 = (int)(this.LastModified.Value - GZipStream._unixEpoch).TotalSeconds;
 			Array.Copy(BitConverter.GetBytes(num5), 0, array3, num4, 4);
 			num4 += 4;
 			array3[num4++] = 0;

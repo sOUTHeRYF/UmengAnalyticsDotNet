@@ -1,6 +1,7 @@
-using Microsoft.Phone.Info;
-using Microsoft.Phone.Net.NetworkInformation;
+//using Microsoft.Phone.Info;
+//using Microsoft.Phone.Net.NetworkInformation;
 using System;
+using System.Management;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net;
@@ -8,7 +9,7 @@ using System.Threading;
 using System.Windows;
 using UmengSDK.Business;
 using UmengSDK.Common;
-
+using System.Windows.Forms;
 namespace UmengSDK.Model
 {
 	internal class Header : Hub
@@ -91,21 +92,31 @@ namespace UmengSDK.Model
 			base.put(this.KEY_DEVICE_ID, this.getIDMD5());
 			base.put(this.KEY_DEVICE, this.getDeviceID());
 			base.put(this.KEY_ANID2, Header.getUserID());
-			base.put(this.KEY_DEVICE_MODEL, string.Format("{0}_{1}", DeviceStatus.get_DeviceManufacturer(), DeviceStatus.get_DeviceName()));
+			base.put(this.KEY_DEVICE_MODEL, getComputerName());
 			this.getResolution();
 			base.put(this.KEY_SDK_TYPE, Constants.SDK_TYPE);
 			base.put(this.KEY_SDK_VERSION, Constants.SDK_VERSION);
 			base.put(this.KEY_OS, Constants.OS);
-			base.put(this.KEY_OS_VERSION, Environment.get_OSVersion().get_Version().ToString());
+			base.put(this.KEY_OS_VERSION, Environment.OSVersion.Version.ToString());
 			base.put(this.KEY_APP_VERSION, AppInfo.GetVersion());
 			base.put(this.KEY_PACKAGE, AppInfo.GetProductId());
 			this.getCulture();
 			base.put(this.KEY_TIMEZONE, this.GetDSTAdjustedTimeZone());
-			base.put(this.KEY_CARRIER, DeviceNetworkInformation.get_CellularMobileOperator());
+			base.put(this.KEY_CARRIER, "unknown");
 			this.getNetworkType();
 			this.getNetworkName();
 		}
-
+        private string getComputerName()
+        {
+            try
+            {
+                return System.Environment.GetEnvironmentVariable("ComputerName");
+            }
+            catch
+            {
+                return "unknow";
+            }
+        }
 		private string getIDMD5()
 		{
 			try
@@ -113,14 +124,23 @@ namespace UmengSDK.Model
 				string text = UmengSettings.Get<string>(this.KEY_DEVICE_ID, null);
 				if (string.IsNullOrEmpty(text))
 				{
-					byte[] array = (byte[])DeviceExtendedProperties.GetValue("DeviceUniqueId");
-					if (array != null && array.Length > 0)
+                    string mac = "";
+                    ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
+                    ManagementObjectCollection moc = mc.GetInstances();
+                    foreach (ManagementObject mo in moc)
+                    {
+                        if ((bool)mo["IPEnabled"] == true)
+                        {
+                            mac = mo["MacAddress"].ToString();
+                            break;
+                        }
+                    }
+                    moc = null;
+                    mc = null;
+                    text = MD5Core.GetHashString(mac);
+				    if (!string.IsNullOrEmpty(text))
 					{
-						text = MD5Core.GetHashString(array);
-						if (!string.IsNullOrEmpty(text))
-						{
-							UmengSettings.Put(this.KEY_DEVICE_ID, text);
-						}
+						UmengSettings.Put(this.KEY_DEVICE_ID, text);
 					}
 				}
 				return text;
@@ -139,15 +159,21 @@ namespace UmengSDK.Model
 				string text = UmengSettings.Get<string>(this.KEY_DEVICE, null);
 				if (string.IsNullOrEmpty(text))
 				{
-					byte[] array = (byte[])DeviceExtendedProperties.GetValue("DeviceUniqueId");
-					if (array != null && array.Length > 0)
-					{
-						text = BitConverter.ToString(array).Replace("-", "");
-						if (!string.IsNullOrEmpty(text))
-						{
-							UmengSettings.Put(this.KEY_DEVICE, text);
-						}
-					}
+                    string mac = "";
+                    ManagementClass mc = new ManagementClass("Win32_NetworkAdapterConfiguration");
+                    ManagementObjectCollection moc = mc.GetInstances();
+                    foreach (ManagementObject mo in moc)
+                    {
+                        if ((bool)mo["IPEnabled"] == true)
+                        {
+                            mac = mo["MacAddress"].ToString();
+                            break;
+                        }
+                    }
+                    moc = null;
+                    mc = null;
+                    UmengSettings.Put(this.KEY_DEVICE, mac);
+                    return mac;
 				}
 				return text;
 			}
@@ -160,62 +186,21 @@ namespace UmengSDK.Model
 
 		public static string getUserID()
 		{
-			try
-			{
-				return UserExtendedProperties.GetValue("ANID2") as string;
-			}
-			catch (Exception e)
-			{
-				DebugUtil.Log("maybe missing permission ID_CAP_IDENTITY_DEVICE", e);
-			}
-			return "1234567890";
+            return Instance().getDeviceID();
 		}
 
 		private void getResolution()
 		{
-			AutoResetEvent myResetEvent = new AutoResetEvent(false);
-			Deployment.get_Current().get_Dispatcher().BeginInvoke(delegate
-			{
-				try
-				{
-					DebugUtil.Log("get resolution", "udebug----------->");
-					this.put(this.KEY_RESOLUTION, this.GetResolutionWP8());
-				}
-				catch (Exception ex)
-				{
-					DebugUtil.Log("Fail to read resolution :" + ex.get_Message(), "udebug----------->");
-				}
-				finally
-				{
-					myResetEvent.Set();
-				}
-			});
-			myResetEvent.WaitOne(2000);
+            int SH = Screen.PrimaryScreen.Bounds.Height;
+            int SW = Screen.PrimaryScreen.Bounds.Width;
+            this.put(this.KEY_RESOLUTION, SW.ToString()+"*"+SH.ToString());
+				
 		}
-
-		private string GetResolutionWP8()
-		{
-			int scaleFactor = Application.get_Current().get_Host().get_Content().get_ScaleFactor();
-			if (scaleFactor == 100)
-			{
-				return "480*800";
-			}
-			if (scaleFactor == 150)
-			{
-				return "720*1280";
-			}
-			if (scaleFactor != 160)
-			{
-				return "unknown";
-			}
-			return "768*1280";
-		}
-
 		private void getCulture()
 		{
 			try
 			{
-				string text = CultureInfo.get_CurrentCulture().ToString();
+				string text = CultureInfo.CurrentCulture.ToString();
 				string[] array = text.Split(new char[]
 				{
 					'-'
@@ -237,135 +222,19 @@ namespace UmengSDK.Model
 
 		private int GetDSTAdjustedTimeZone()
 		{
-			int result;
-			try
-			{
-				int num = (int)TimeZoneInfo.get_Local().get_BaseUtcOffset().get_TotalHours();
-				if (TimeZoneInfo.get_Local().IsDaylightSavingTime(DateTime.get_Now()))
-				{
-					num++;
-				}
-				result = num;
-			}
-			catch (Exception e)
-			{
-				DebugUtil.Log("Fail to read timezone (default 8) :", e);
-				result = 8;
-			}
-			return result;
+            return 8;
 		}
 
 		private void getNetworkType()
 		{
-			NetworkInterfaceType networkInterfaceType = NetworkInterface.get_NetworkInterfaceType();
-			string value = networkInterfaceType.ToString();
-			NetworkInterfaceType networkInterfaceType2 = networkInterfaceType;
-			if (networkInterfaceType2 <= 6)
-			{
-				if (networkInterfaceType2 == 0 || networkInterfaceType2 == 6)
-				{
-					value = "unknown";
-				}
-			}
-			else if (networkInterfaceType2 != 71)
-			{
-				switch (networkInterfaceType2)
-				{
-				case 145:
-				case 146:
-					value = "2G/3G";
-					break;
-				}
-			}
-			else
-			{
-				value = "Wi-Fi";
-			}
+            string value = "Wi-Fi";
 			base.put(this.KEY_ACCESS, value);
 		}
 
 		public void getNetworkName()
 		{
-			DebugUtil.Log("get network name", "udebug----------->");
-			AutoResetEvent myResetEvent = new AutoResetEvent(false);
-			DeviceNetworkInformation.ResolveHostNameAsync(new DnsEndPoint("www.baidu.com", 80), delegate(NameResolutionResult handle)
-			{
-				try
-				{
-					NetworkInterfaceInfo networkInterface = handle.get_NetworkInterface();
-					if (networkInterface != null)
-					{
-						NetworkInterfaceType interfaceType = networkInterface.get_InterfaceType();
-						if (interfaceType != 6)
-						{
-							if (interfaceType != 71)
-							{
-								switch (interfaceType)
-								{
-								case 145:
-								case 146:
-									this.put(this.KEY_SUB_ACCESS, this.ConvertInterfaceSubtype(networkInterface.get_InterfaceSubtype()));
-									break;
-								default:
-									this.put(this.KEY_ACCESS, "None");
-									break;
-								}
-							}
-							else
-							{
-								this.put(this.KEY_ACCESS, "WiFi");
-							}
-						}
-						else
-						{
-							this.put(this.KEY_ACCESS, "Ethernet");
-						}
-					}
-				}
-				catch (Exception e)
-				{
-					DebugUtil.Log(e);
-				}
-				finally
-				{
-					myResetEvent.Set();
-				}
-			}, null);
-			myResetEvent.WaitOne(5000);
-		}
-
-		private string ConvertInterfaceSubtype(NetworkInterfaceSubType subType)
-		{
-			string result = string.Empty;
-			switch (subType)
-			{
-			case 1:
-				result = "GPRS";
-				break;
-			case 2:
-				result = "2G";
-				break;
-			case 3:
-				result = "EVDO";
-				break;
-			case 4:
-				result = "EDGE";
-				break;
-			case 5:
-				result = "3G";
-				break;
-			case 6:
-				result = "HSPA";
-				break;
-			case 7:
-				result = "EVDV";
-				break;
-			default:
-				result = "unknown";
-				break;
-			}
-			return result;
-		}
+            this.put(this.KEY_ACCESS, "WiFi");
+        }
 
 		public Dictionary<string, object> ToOnlineConfigDictionary()
 		{
@@ -393,7 +262,7 @@ namespace UmengSDK.Model
 			return dictionary;
 		}
 
-		public Dictionary<string, object> ToDictionary()
+		public new Dictionary<string, object> ToDictionary()
 		{
 			if (Constants.get_user_info)
 			{
@@ -418,7 +287,7 @@ namespace UmengSDK.Model
 						dictionary.Add("source", text2);
 					}
 				}
-				if (dictionary.get_Count() > 0)
+				if (dictionary.Count > 0)
 				{
 					base.put("uinfo", dictionary);
 				}

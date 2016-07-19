@@ -39,10 +39,18 @@ namespace UmengSDK.Business
 		{
 			get
 			{
-				bool result;
+                bool result = false;
 				try
 				{
-					result = this._isoFile.FileExists(this.FileName);
+                    string[] results = _isoFile.GetFileNames("*");
+                    foreach (string index in results)
+                    {
+                        if (index.CompareTo(this.FileName) == 0)
+                        {
+                            result = true;
+                            break;
+                        }
+                    }
 				}
 				catch (Exception)
 				{
@@ -136,7 +144,7 @@ namespace UmengSDK.Business
 			{
 				lock (this)
 				{
-					if (this._isoFile.FileExists(this.FileName))
+					if (this.HasCache)
 					{
 						this._isoFile.DeleteFile(this.FileName);
 						DebugUtil.Log("delete cached message successed!", "udebug----------->");
@@ -160,9 +168,10 @@ namespace UmengSDK.Business
 			{
 				if (this.HasCache)
 				{
-					using (IsolatedStorageFileStream isolatedStorageFileStream = this._isoFile.OpenFile(this.FileName, 3, 1))
-					{
-						if (isolatedStorageFileStream.get_Length() > 0L)
+                //    	using (IsolatedStorageFileStream isolatedStorageFileStream = this._isoFile.OpenFile(this.FileName, 3, 1))
+                   using (IsolatedStorageFileStream isolatedStorageFileStream = new IsolatedStorageFileStream(this.FileName, FileMode.Open, FileAccess.Read))
+                    {
+						if (isolatedStorageFileStream.Length > 0L)
 						{
 							using (StreamReader streamReader = new StreamReader(isolatedStorageFileStream))
 							{
@@ -191,7 +200,7 @@ namespace UmengSDK.Business
 				string text;
 				if (body != null && (text = JSON.JsonEncode(body.ToDictionary())) != null)
 				{
-					using (IsolatedStorageFileStream isolatedStorageFileStream = this._isoFile.OpenFile(this.FileName, 4, 2))
+					using (IsolatedStorageFileStream isolatedStorageFileStream = new IsolatedStorageFileStream(this.FileName, FileMode.OpenOrCreate, FileAccess.Write))
 					{
 						using (StreamWriter streamWriter = new StreamWriter(isolatedStorageFileStream))
 						{

@@ -32,12 +32,12 @@ namespace UmengSDK.Third.Gzip
 
 		internal static byte[] ToByteArray(string sourceString)
 		{
-			return Encoding.get_UTF8().GetBytes(sourceString);
+			return Encoding.UTF8.GetBytes(sourceString);
 		}
 
 		internal static char[] ToCharArray(byte[] byteArray)
 		{
-			return Encoding.get_UTF8().GetChars(byteArray);
+			return Encoding.UTF8.GetChars(byteArray);
 		}
 	}
 }

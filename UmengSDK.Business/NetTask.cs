@@ -92,12 +92,12 @@ namespace UmengSDK.Business
 			this._isBusy = true;
 			Uri uri = new Uri(url);
 			HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
-			httpWebRequest.set_Method("POST");
-			httpWebRequest.set_ContentType("application/x-www-form-urlencoded");
-			httpWebRequest.get_Headers().set_Item("X-Umeng-Sdk", "windowsphone/1.0");
+			httpWebRequest.Method = "POST";
+			httpWebRequest.ContentType ="application/x-www-form-urlencoded";
+			httpWebRequest.Headers["X-Umeng-Sdk"] = "windowsphone/1.0";
 			if (this._isCompressed)
 			{
-				httpWebRequest.get_Headers().set_Item("Content-Encoding", "gzip");
+				httpWebRequest.Headers["Content-Encoding"] = "gzip";
 			}
 			httpWebRequest.BeginGetRequestStream(new AsyncCallback(this.RequestReady), httpWebRequest);
 		}
@@ -108,8 +108,8 @@ namespace UmengSDK.Business
 			{
 				try
 				{
-					Thread.get_CurrentThread().set_Name("UmengNetTask");
-					HttpWebRequest httpWebRequest = asyncResult.get_AsyncState() as HttpWebRequest;
+					Thread.CurrentThread.Name = "UmengNetTask";
+					HttpWebRequest httpWebRequest = asyncResult.AsyncState as HttpWebRequest;
 					if (this._isCompressed)
 					{
 						using (Stream stream = httpWebRequest.EndGetRequestStream(asyncResult))
@@ -144,16 +144,16 @@ namespace UmengSDK.Business
 		{
 			string response = null;
 			bool flag = false;
-			HttpWebRequestState httpWebRequestState = asyncResult.get_AsyncState() as HttpWebRequestState;
+			HttpWebRequestState httpWebRequestState = asyncResult.AsyncState as HttpWebRequestState;
 			httpWebRequestState.TimeoutEvent.Set();
 			try
 			{
 				HttpWebRequest request = httpWebRequestState.Request;
 				HttpWebResponse httpWebResponse = request.EndGetResponse(asyncResult) as HttpWebResponse;
-				if (httpWebResponse != null && httpWebResponse.get_StatusCode() == 200)
+				if (httpWebResponse != null && httpWebResponse.StatusCode == HttpStatusCode.OK)
 				{
 					Stream responseStream = httpWebResponse.GetResponseStream();
-					response = new StreamReader(responseStream, Encoding.get_UTF8()).ReadToEnd();
+					response = new StreamReader(responseStream, Encoding.UTF8).ReadToEnd();
 					httpWebResponse.Close();
 					responseStream.Close();
 					responseStream.Dispose();

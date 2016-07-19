@@ -11,7 +11,7 @@ namespace UmengSDK
 
 		public OnlineParamEventArgs(Dictionary<string, string> onlineParams)
 		{
-			if (onlineParams != null && onlineParams.get_Count() > 0)
+			if (onlineParams != null && onlineParams.Count > 0)
 			{
 				this.IsUpdate = true;
 				this.Result = onlineParams;

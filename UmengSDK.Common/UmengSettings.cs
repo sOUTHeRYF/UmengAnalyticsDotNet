@@ -35,7 +35,7 @@ namespace UmengSDK.Common
 			{
 				lock (UmengSettings.syncObj)
 				{
-					if (UmengSettings._settingsDic != null && UmengSettings._settingsDic.get_Count() > 0)
+					if (UmengSettings._settingsDic != null && UmengSettings._settingsDic.Count > 0)
 					{
 						UmengSettings._settingsDic.Save("UmengSettings.xml");
 					}
@@ -76,7 +76,7 @@ namespace UmengSDK.Common
 					{
 						if (UmengSettings._settingsDic.ContainsKey(key))
 						{
-							UmengSettings._settingsDic.set_Item(key, value);
+							UmengSettings._settingsDic[key] = value;
 						}
 						else
 						{
@@ -106,7 +106,7 @@ namespace UmengSDK.Common
 			}
 		}
 
-		public static T Get<T>(string key, T defaultValue = null)
+		public static T Get<T>(string key, T defaultValue)
 		{
 			try
 			{
@@ -117,7 +117,7 @@ namespace UmengSDK.Common
 				}
 				if (UmengSettings._settingsDic.ContainsKey(key))
 				{
-					T result = (T)((object)UmengSettings._settingsDic.get_Item(key));
+					T result = (T)((object)UmengSettings._settingsDic[key]);
 					return result;
 				}
 			}
@@ -136,8 +136,8 @@ namespace UmengSDK.Common
 				{
 					if (UmengSettings._settingsDic.ContainsKey(key))
 					{
-						int num = (int)UmengSettings._settingsDic.get_Item(key);
-						UmengSettings._settingsDic.set_Item(key, num + delta);
+						int num = (int)UmengSettings._settingsDic[key];
+						UmengSettings._settingsDic[key] = num + delta;
 					}
 					else
 					{
@@ -159,8 +159,8 @@ namespace UmengSDK.Common
 				{
 					if (UmengSettings._settingsDic.ContainsKey(key))
 					{
-						string text = (string)UmengSettings._settingsDic.get_Item(key);
-						UmengSettings._settingsDic.set_Item(key, text + ";" + msg);
+						string text = (string)UmengSettings._settingsDic[key];
+						UmengSettings._settingsDic[key] = (text + ";" + msg);
 					}
 					else
 					{

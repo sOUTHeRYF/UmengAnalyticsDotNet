@@ -1,9 +1,9 @@
-using Microsoft.Phone.Tasks;
+//using Microsoft.Phone.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using System.Windows;
+//using System.Windows;
 using UmengSDK.Common;
 
 namespace UmengSDK.Business
@@ -46,11 +46,11 @@ namespace UmengSDK.Business
 					{
 						this.CheckCompletedEvent(out flag, dictionary);
 					}
-					if (!flag && dictionary.ContainsKey("update") && "yes".Equals(dictionary.get_Item("update").ToString().ToLower()))
+					if (!flag && dictionary.ContainsKey("update") && "yes".Equals(dictionary["update"].ToString().ToLower()))
 					{
-						string version = dictionary.ContainsKey("version") ? (dictionary.get_Item("version") as string) : string.Empty;
-						string description = dictionary.ContainsKey("update_log") ? (dictionary.get_Item("update_log") as string) : string.Empty;
-						string link = dictionary.ContainsKey("path") ? (dictionary.get_Item("path") as string) : string.Empty;
+						string version = dictionary.ContainsKey("version") ? (dictionary["version"] as string) : string.Empty;
+						string description = dictionary.ContainsKey("update_log") ? (dictionary["update_log"] as string) : string.Empty;
+						string link = dictionary.ContainsKey("path") ? (dictionary["path"] as string) : string.Empty;
 						this.ShowUpdateDialog(version, description, link);
 					}
 					return;
@@ -69,7 +69,7 @@ namespace UmengSDK.Business
             /*
 			StringBuilder uinfo = new StringBuilder();
 			uinfo.Append("Latest version:").Append(version).Append("\n").Append(description);
-			Deployment.get_Current().get_Dispatcher().BeginInvoke(delegate
+			Deployment.Current.get_Dispatcher().BeginInvoke(delegate
 			{
 				MessageBoxResult messageBoxResult = MessageBox.Show(uinfo.ToString(), "New version found", 1);
 				if (messageBoxResult == 1)
@@ -80,8 +80,10 @@ namespace UmengSDK.Business
             */
 		}
 
-		private void OpenMarket(string link)
+        //Won't Exist In DoeNet Envirment
+        private void OpenMarket(string link)
 		{
+            /*
 			if (string.IsNullOrEmpty(link))
 			{
 				return;
@@ -96,6 +98,7 @@ namespace UmengSDK.Business
 			{
 				DebugUtil.Log("Fail to open url : " + link, e);
 			}
+            */
 		}
 	}
 }

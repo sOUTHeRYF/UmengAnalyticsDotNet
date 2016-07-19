@@ -49,27 +49,27 @@ namespace UmengSDK.Model
 				int num = 0;
 				if (this.launches != null)
 				{
-					num += this.launches.get_Count();
+					num += this.launches.Count;
 				}
 				if (this.terminates != null)
 				{
-					num += this.terminates.get_Count();
+					num += this.terminates.Count;
 				}
 				if (this.eventLogs != null)
 				{
-					num += this.eventLogs.get_Count();
+					num += this.eventLogs.Count;
 				}
 				if (this.errorLogs != null)
 				{
-					num += this.errorLogs.get_Count();
+					num += this.errorLogs.Count;
 				}
 				if (this.ekvlogs != null)
 				{
-					num += this.ekvlogs.get_Count();
+					num += this.ekvlogs.Count;
 				}
 				if (this.ekvBuffer != null)
 				{
-					num += this.ekvBuffer.get_Count();
+					num += this.ekvBuffer.Count;
 				}
 				return num;
 			}
@@ -87,23 +87,23 @@ namespace UmengSDK.Model
 			}
 			if (dic.ContainsKey(this.KEY_ERROR))
 			{
-				this.errorLogs = (dic.get_Item(this.KEY_ERROR) as List<object>);
+				this.errorLogs = (dic[this.KEY_ERROR] as List<object>);
 			}
 			if (dic.ContainsKey(this.KEY_EVENT))
 			{
-				this.eventLogs = (dic.get_Item(this.KEY_EVENT) as List<object>);
+				this.eventLogs = (dic[this.KEY_EVENT] as List<object>);
 			}
 			if (dic.ContainsKey(this.KEY_LAUNCH))
 			{
-				this.launches = (dic.get_Item(this.KEY_LAUNCH) as List<object>);
+				this.launches = (dic[this.KEY_LAUNCH] as List<object>);
 			}
 			if (dic.ContainsKey(this.KEY_TERMINATE))
 			{
-				this.terminates = (dic.get_Item(this.KEY_TERMINATE) as List<object>);
+				this.terminates = (dic[this.KEY_TERMINATE] as List<object>);
 			}
 			if (dic.ContainsKey(this.KEY_EKV))
 			{
-				this.ekvlogs = (dic.get_Item(this.KEY_EKV) as List<object>);
+				this.ekvlogs = (dic[this.KEY_EKV] as List<object>);
 			}
 		}
 
@@ -187,7 +187,7 @@ namespace UmengSDK.Model
 				{
 					des = src;
 				}
-				else if (src != null && src.get_Count() > 0)
+				else if (src != null && src.Count > 0)
 				{
 					des.AddRange(src);
 				}
@@ -232,18 +232,18 @@ namespace UmengSDK.Model
 				if (this.IsSessionReady)
 				{
 					this.setSessionId(this.eventLogs, this.SessionId);
-					if (this.ekvBuffer != null && this.ekvBuffer.get_Count() > 0)
+					if (this.ekvBuffer != null && this.ekvBuffer.Count > 0)
 					{
 						if (this.ekvlogs == null)
 						{
 							this.ekvlogs = new List<object>();
 						}
-						if (this.ekvlogs.get_Count() > 0)
+						if (this.ekvlogs.Count > 0)
 						{
-							Dictionary<string, object> dictionary = this.ekvlogs.get_Item(this.ekvlogs.get_Count() - 1) as Dictionary<string, object>;
-							if (dictionary != null && dictionary.get_Count() > 0 && dictionary.ContainsKey(this.SessionId))
+							Dictionary<string, object> dictionary = this.ekvlogs[this.ekvlogs.Count - 1] as Dictionary<string, object>;
+							if (dictionary != null && dictionary.Count > 0 && dictionary.ContainsKey(this.SessionId))
 							{
-								List<object> list = dictionary.get_Item(this.SessionId) as List<object>;
+								List<object> list = dictionary[this.SessionId] as List<object>;
 								list.AddRange(this.ekvBuffer);
 								this.ekvBuffer = new List<object>();
 								return;
@@ -263,13 +263,13 @@ namespace UmengSDK.Model
 		{
 			lock (this)
 			{
-				if (list != null && list.get_Count() > 0)
+				if (list != null && list.Count > 0)
 				{
 					using (IEnumerator<object> enumerator = Enumerable.Where<object>(list, (object t) => !(t as Dictionary<string, object>).ContainsKey("session_id")).GetEnumerator())
 					{
 						while (enumerator.MoveNext())
 						{
-							object current = enumerator.get_Current();
+							object current = enumerator.Current;
 							(current as Dictionary<string, object>).Add("session_id", sessionId);
 						}
 					}

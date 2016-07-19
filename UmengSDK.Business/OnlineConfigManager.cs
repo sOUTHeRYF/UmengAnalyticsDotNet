@@ -11,26 +11,26 @@ namespace UmengSDK.Business
 	{
 		public delegate void UpdateCompletedHandler(bool isUpdated, OnlineConfigManager.OnlineConfig config);
 
-		[DataContract]
+	//	[DataContract]
 		public class OnlineConfig
 		{
 			private uint _interval = 30u;
 
-			[DataMember]
+		//	[DataMember]
 			public ReportPolicy Policy
 			{
 				get;
 				set;
 			}
 
-			[DataMember]
+		//	[DataMember]
 			public string LastConfigTime
 			{
 				get;
 				set;
 			}
 
-			[DataMember]
+		//	[DataMember]
 			public uint Interval
 			{
 				get
@@ -64,7 +64,7 @@ namespace UmengSDK.Business
 
 		public const string KEY_REPORT_INTERVAL = "report_interval";
 
-		private IsolatedStorageSettings _isoSettings = IsolatedStorageSettings.get_ApplicationSettings();
+	//	private IsolatedStorageSettings _isoSettings = IsolatedStorageSettings.get_ApplicationSettings();
 
 		private static readonly object synObj = new object();
 
@@ -164,7 +164,7 @@ namespace UmengSDK.Business
 				{
 					bool isUpdated = false;
 					Dictionary<string, object> dictionary = (Dictionary<string, object>)JSON.JsonDecode(result);
-					if (dictionary.ContainsKey("config_update") && "no".Equals(dictionary.get_Item("config_update").ToString().ToLower()))
+					if (dictionary.ContainsKey("config_update") && "no".Equals(dictionary["config_update"].ToString().ToLower()))
 					{
 						DebugUtil.Log("has no online config update", "udebug----------->");
 					}
@@ -175,15 +175,15 @@ namespace UmengSDK.Business
 							isUpdated = true;
 							if (dictionary.ContainsKey("report_policy"))
 							{
-								this._config.Policy = (ReportPolicy)((long)dictionary.get_Item("report_policy"));
+								this._config.Policy = (ReportPolicy)((long)dictionary["report_policy"]);
 							}
 							if (dictionary.ContainsKey("last_config_time"))
 							{
-								this._config.LastConfigTime = (dictionary.get_Item("last_config_time") as string);
+								this._config.LastConfigTime = (dictionary["last_config_time"] as string);
 							}
 							if (dictionary.ContainsKey("report_interval"))
 							{
-								long num = (long)dictionary.get_Item("report_interval");
+								long num = (long)dictionary["report_interval"];
 								this._config.Interval = (uint)num;
 							}
 							this.SaveFile();
@@ -217,6 +217,7 @@ namespace UmengSDK.Business
 			{
 				lock (this)
 				{
+                    /*Todo
 					if (this._isoSettings.Contains("config"))
 					{
 						this._isoSettings.set_Item("config", this._config);
@@ -226,6 +227,7 @@ namespace UmengSDK.Business
 						this._isoSettings.Add("config", this._config);
 					}
 					this._isoSettings.Save();
+                    */
 				}
 			}
 			catch (Exception e)
@@ -236,16 +238,18 @@ namespace UmengSDK.Business
 
 		private bool LoadFile()
 		{
-			bool result;
+			bool result = false;
 			try
 			{
 				lock (this)
 				{
+                    /*Todo
 					if (this._isoSettings.Contains("config"))
 					{
 						this._config = (this._isoSettings.get_Item("config") as OnlineConfigManager.OnlineConfig);
 					}
 					result = (this._config != null);
+                    */
 				}
 			}
 			catch (Exception e)

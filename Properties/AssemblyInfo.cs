@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
 [assembly: AssemblyVersion("2.0.1.0")]
-[assembly: Debuggable]
 [assembly: AssemblyCompany("http://www.umeng.com")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
@@ -21,4 +20,3 @@ using System.Runtime.Versioning;
 [assembly: RuntimeCompatibility(WrapNonExceptionThrows = true)]
 [assembly: ComVisible(false)]
 [assembly: Guid("678eea11-f4f2-473a-9f28-8e2287b6f327")]
-[assembly: TargetFramework("WindowsPhone,Version=v8.0", FrameworkDisplayName = "Windows Phone 8.0")]

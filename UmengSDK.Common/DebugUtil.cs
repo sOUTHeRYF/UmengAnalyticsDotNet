@@ -32,7 +32,7 @@ namespace UmengSDK.Common
 		{
 			if (e != null)
 			{
-				DebugUtil.Log(e.get_Message() + "\n" + e.get_StackTrace(), "udebug----------->");
+				DebugUtil.Log(e.Message + "\n" + e.StackTrace, "udebug----------->");
 			}
 		}
 
@@ -48,26 +48,26 @@ namespace UmengSDK.Common
 			{
 				return;
 			}
-			if (s.get_Length() <= 500)
+			if (s.Length <= 500)
 			{
 				DebugUtil.Logg(s, prefix);
 				return;
 			}
-			if (s.get_Length() <= 1000)
+			if (s.Length <= 1000)
 			{
 				DebugUtil.Logg(s.Substring(0, 500), prefix);
-				DebugUtil.Logg(s.Substring(500, s.get_Length() - 500), prefix);
+				DebugUtil.Logg(s.Substring(500, s.Length - 500), prefix);
 				return;
 			}
-			if (s.get_Length() <= 1500)
+			if (s.Length <= 1500)
 			{
 				DebugUtil.Logg(s.Substring(0, 500), prefix);
 				DebugUtil.Logg(s.Substring(500, 500), prefix);
-				DebugUtil.Logg(s.Substring(1000, s.get_Length() - 1000), prefix);
+				DebugUtil.Logg(s.Substring(1000, s.Length - 1000), prefix);
 				return;
 			}
 			int num = 0;
-			while (num + 500 < s.get_Length())
+			while (num + 500 < s.Length)
 			{
 				DebugUtil.Logg(s.Substring(num, 500), prefix);
 				num += 500;

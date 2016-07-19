@@ -273,7 +273,7 @@ namespace UmengSDK.Third.Gzip
 				case InflateBlocks.InflateBlockMode.BTREE:
 					goto IL_7D0;
 				case InflateBlocks.InflateBlockMode.DTREE:
-					goto IL_8C2;
+                        break;
 				case InflateBlocks.InflateBlockMode.CODES:
 					goto IL_CD0;
 				case InflateBlocks.InflateBlockMode.DRY:
@@ -316,7 +316,7 @@ namespace UmengSDK.Third.Gzip
 				this.mode = InflateBlocks.InflateBlockMode.DTREE;
 				while (true)
 				{
-					IL_8C2:
+                    Block_3a:
 					num6 = this.table;
 					if (this.index >= 258 + (num6 & 31) + (num6 >> 5 & 31))
 					{

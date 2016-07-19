@@ -172,7 +172,7 @@ namespace UmengSDK.Third.Gzip
 					num2 = num;
 					this._codec.AvailableBytesIn--;
 					this._codec.TotalBytesIn += 1L;
-					this.expectedCheck = (uint)((long)((long)this._codec.InputBuffer[this._codec.NextIn++] << 24) & (long)((ulong)-16777216));
+					this.expectedCheck = (uint)((long)((long)this._codec.InputBuffer[this._codec.NextIn++] << 24) & (long)(-16777216));
 					this.mode = InflateManager.InflateManagerMode.DICT3;
 					continue;
 				case InflateManager.InflateManagerMode.DICT3:
@@ -233,7 +233,7 @@ namespace UmengSDK.Third.Gzip
 					num2 = num;
 					this._codec.AvailableBytesIn--;
 					this._codec.TotalBytesIn += 1L;
-					this.expectedCheck = (uint)((long)((long)this._codec.InputBuffer[this._codec.NextIn++] << 24) & (long)((ulong)-16777216));
+					this.expectedCheck = (uint)((long)((long)this._codec.InputBuffer[this._codec.NextIn++] << 24) & (long)(-16777216));
 					this.mode = InflateManager.InflateManagerMode.CHECK3;
 					continue;
 				case InflateManager.InflateManagerMode.CHECK3:

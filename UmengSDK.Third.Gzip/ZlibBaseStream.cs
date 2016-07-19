@@ -108,7 +108,7 @@ namespace UmengSDK.Third.Gzip
 		{
 			get
 			{
-				return this._stream.get_CanRead();
+				return this._stream.CanRead;
 			}
 		}
 
@@ -116,7 +116,7 @@ namespace UmengSDK.Third.Gzip
 		{
 			get
 			{
-				return this._stream.get_CanSeek();
+				return this._stream.CanSeek;
 			}
 		}
 
@@ -124,7 +124,7 @@ namespace UmengSDK.Third.Gzip
 		{
 			get
 			{
-				return this._stream.get_CanWrite();
+				return this._stream.CanWrite;
 			}
 		}
 
@@ -132,7 +132,7 @@ namespace UmengSDK.Third.Gzip
 		{
 			get
 			{
-				return this._stream.get_Length();
+				return this._stream.Length;
 			}
 		}
 
@@ -254,7 +254,7 @@ namespace UmengSDK.Third.Gzip
 					{
 						int crc32Result = this.crc.Crc32Result;
 						this._stream.Write(BitConverter.GetBytes(crc32Result), 0, 4);
-						int num2 = (int)(this.crc.TotalBytesRead & (long)((ulong)-1));
+						int num2 = (int)(this.crc.TotalBytesRead & (long)(-1));
 						this._stream.Write(BitConverter.GetBytes(num2), 0, 4);
 						return;
 					}
@@ -289,7 +289,7 @@ namespace UmengSDK.Third.Gzip
 				int num5 = BitConverter.ToInt32(array, 0);
 				int crc32Result2 = this.crc.Crc32Result;
 				int num6 = BitConverter.ToInt32(array, 4);
-				int num7 = (int)(this._z.TotalBytesOut & (long)((ulong)-1));
+				int num7 = (int)(this._z.TotalBytesOut & (long)(-1));
 				if (crc32Result2 != num5)
 				{
 					throw new ZlibException(string.Format("Bad CRC32 in GZIP trailer. (actual({0:X8})!=expected({1:X8}))", crc32Result2, num5));
@@ -436,7 +436,7 @@ namespace UmengSDK.Third.Gzip
 		{
 			if (this._streamMode == ZlibBaseStream.StreamMode.Undefined)
 			{
-				if (!this._stream.get_CanRead())
+				if (!this._stream.CanRead)
 				{
 					throw new ZlibException("The stream is not readable.");
 				}
@@ -538,7 +538,7 @@ namespace UmengSDK.Third.Gzip
 
 		public static void CompressString(string s, Stream compressor)
 		{
-			byte[] bytes = Encoding.get_UTF8().GetBytes(s);
+			byte[] bytes = Encoding.UTF8.GetBytes(s);
 			try
 			{
 				compressor.Write(bytes, 0, bytes.Length);
@@ -570,7 +570,7 @@ namespace UmengSDK.Third.Gzip
 		public static string UncompressString(byte[] compressed, Stream decompressor)
 		{
 			byte[] array = new byte[1024];
-			Encoding uTF = Encoding.get_UTF8();
+			Encoding uTF = Encoding.UTF8;
 			string result;
 			using (MemoryStream memoryStream = new MemoryStream())
 			{

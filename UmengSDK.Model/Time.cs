@@ -13,8 +13,8 @@ namespace UmengSDK.Model
 
 		public Time()
 		{
-			base.put(this.KEY_DATE, DateTime.get_Now().ToString("yyyy-MM-dd"));
-			base.put(this.KEY_TIME, DateTime.get_Now().ToString("HH:mm:ss"));
+			base.put(this.KEY_DATE, DateTime.Now.ToString("yyyy-MM-dd"));
+			base.put(this.KEY_TIME, DateTime.Now.ToString("HH:mm:ss"));
 		}
 
 		public void setSession(string sessionId)

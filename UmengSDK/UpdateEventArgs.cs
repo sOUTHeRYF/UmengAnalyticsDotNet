@@ -20,12 +20,12 @@ namespace UmengSDK
 		{
 			try
 			{
-				if (updateInfo != null && updateInfo.ContainsKey("update") && "yes".Equals(updateInfo.get_Item("update").ToString().ToLower()))
+				if (updateInfo != null && updateInfo.ContainsKey("update") && "yes".Equals(updateInfo["update"].ToString().ToLower()))
 				{
 					this.update = true;
-					this.ProductID = (updateInfo.ContainsKey("path") ? (updateInfo.get_Item("path") as string) : this.ProductID);
-					this.VersionName = (updateInfo.ContainsKey("version") ? (updateInfo.get_Item("version") as string) : this.VersionName);
-					this.UpdateLog = (updateInfo.ContainsKey("update_log") ? (updateInfo.get_Item("update_log") as string) : this.UpdateLog);
+					this.ProductID = (updateInfo.ContainsKey("path") ? (updateInfo["path"] as string) : this.ProductID);
+					this.VersionName = (updateInfo.ContainsKey("version") ? (updateInfo["version"] as string) : this.VersionName);
+					this.UpdateLog = (updateInfo.ContainsKey("update_log") ? (updateInfo["update_log"] as string) : this.UpdateLog);
 				}
 			}
 			catch (Exception e)

@@ -1,4 +1,4 @@
-using Microsoft.Phone.Net.NetworkInformation;
+//using Microsoft.Phone.Net.NetworkInformation;
 using System;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
@@ -110,7 +110,7 @@ namespace UmengSDK.Business
 			{
 				this._currentPages.Remove(pageName);
 			}
-			this._currentPages.Add(pageName, DateTime.get_Now().get_Ticks());
+			this._currentPages.Add(pageName, DateTime.Now.Ticks);
 			this._currentPage = pageName;
 		}
 
@@ -118,8 +118,8 @@ namespace UmengSDK.Business
 		{
 			if (this._currentPages != null && this._currentPages.ContainsKey(pageName))
 			{
-				long num = (long)this._currentPages.get_Item(pageName);
-				long num2 = (long)Math.Ceiling((double)(DateTime.get_Now().get_Ticks() - num) / 10000000.0);
+				long num = (long)this._currentPages[pageName];
+				long num2 = (long)Math.Ceiling((double)(DateTime.Now.Ticks - num) / 10000000.0);
 				this._pages.Add(string.Format("[\"{0}\",{1}]", pageName, num2));
 				this._currentPages.Remove(pageName);
 			}
@@ -128,7 +128,7 @@ namespace UmengSDK.Business
 
 		public void OnResume()
 		{
-			this._resumeTime = DateTime.get_Now();
+			this._resumeTime = DateTime.Now;
 			this._pages.Clear();
 			this._currentPages.Clear();
 			if (OnlineConfigManager.Current.Policy == ReportPolicy.INTERVAL)
@@ -137,7 +137,7 @@ namespace UmengSDK.Business
 			}
 			if (this.ShouldStartNewSession())
 			{
-				new Thread(delegate
+				new Thread(()=>
 				{
 					Manager._sessionId = this.CreateSessionId();
 					this.MessageTracker.DataBody.SessionId = Manager._sessionId;
@@ -146,7 +146,7 @@ namespace UmengSDK.Business
 					if (OnlineConfigManager.Current.Policy == ReportPolicy.BATCH_AT_LAUNCH)
 					{
 						this.SendCacheMessage(launch, terminate);
-						UmengSettings.Put("LastReportTime", DateTime.get_Now());
+						UmengSettings.Put("LastReportTime", DateTime.Now);
 					}
 					else
 					{
@@ -171,25 +171,25 @@ namespace UmengSDK.Business
 		{
 			BodyPersistentManager.Current.Save(this.MessageTracker.DataBody);
 			this._messageTracker = null;
-			DateTime now = DateTime.get_Now();
+			DateTime now = DateTime.Now;
 			UmengSettings.Put("_umeng_last_pause_time", now.ToString());
 			UmengSettings.Put("_umeng_session_id", Manager._sessionId);
-			UmengSettings.Acc("_umeng_duration", (int)now.Subtract(this._resumeTime).get_TotalSeconds());
-			if (this._pages != null && this._pages.get_Count() > 0)
+			UmengSettings.Acc("_umeng_duration", (int)now.Subtract(this._resumeTime).TotalSeconds);
+			if (this._pages != null && this._pages.Count > 0)
 			{
 				StringBuilder stringBuilder = new StringBuilder();
 				using (List<object>.Enumerator enumerator = this._pages.GetEnumerator())
 				{
 					while (enumerator.MoveNext())
 					{
-						string text = (string)enumerator.get_Current();
+						string text = (string)enumerator.Current;
 						stringBuilder.Append(text);
 						stringBuilder.Append(';');
 					}
 				}
-				if (stringBuilder.get_Length() > 0)
+				if (stringBuilder.Length > 0)
 				{
-					stringBuilder.Remove(stringBuilder.get_Length() - 1, 1);
+					stringBuilder.Remove(stringBuilder.Length - 1, 1);
 					UmengSettings.Acc("_umeng_activities", stringBuilder.ToString());
 				}
 			}
@@ -206,9 +206,9 @@ namespace UmengSDK.Business
 			{
 				StringBuilder stringBuilder = new StringBuilder();
 				stringBuilder.Append(Manager.AppKey);
-				stringBuilder.Append(DateTime.get_Now().get_Ticks());
+				stringBuilder.Append(DateTime.Now.Ticks);
 				stringBuilder.Append(Header.Instance().getDeviceID());
-				return MD5Core.GetHashString(Encoding.get_UTF8().GetBytes(stringBuilder.ToString()));
+				return MD5Core.GetHashString(Encoding.UTF8.GetBytes(stringBuilder.ToString()));
 			}
 			catch (Exception e)
 			{
@@ -232,7 +232,7 @@ namespace UmengSDK.Business
 			case ReportPolicy.DAILY:
 			{
 				DateTime dateTime = DateTime.Parse(UmengSettings.Get<string>(Constants.Key_Last_Report_Time, null));
-				if (DateTime.get_Now().Subtract(dateTime).CompareTo(Constants.One_Day) < 0)
+				if (DateTime.Now.Subtract(dateTime).CompareTo(Constants.One_Day) < 0)
 				{
 					result = false;
 					return result;
@@ -240,12 +240,8 @@ namespace UmengSDK.Business
 				return result;
 			}
 			case ReportPolicy.WIFIONLY:
-				if (!DeviceNetworkInformation.get_IsWiFiEnabled())
-				{
-					result = false;
-					return result;
-				}
-				return result;
+                    result = true;
+                    return result;
 			}
 			result = true;
 			return result;
@@ -259,7 +255,7 @@ namespace UmengSDK.Business
 				DebugUtil.Log("start new session !", "udebug----------->");
 				return true;
 			}
-			if (DateTime.get_Now().Subtract(DateTime.Parse(text)).CompareTo(TimeSpan.FromSeconds((double)Constants.SessionInterval)) > 0)
+			if (DateTime.Now.Subtract(DateTime.Parse(text)).CompareTo(TimeSpan.FromSeconds((double)Constants.SessionInterval)) > 0)
 			{
 				DebugUtil.Log("start new session !", "udebug----------->");
 				return true;
@@ -317,7 +313,7 @@ namespace UmengSDK.Business
 						"send local body success : ",
 						result,
 						" at ",
-						DateTime.get_Now()
+						DateTime.Now
 					}), "udebug----------->");
 				}
 				else
@@ -364,7 +360,7 @@ namespace UmengSDK.Business
 				"Start Periodic Report with Interval: ",
 				interval,
 				" at ",
-				DateTime.get_Now()
+				DateTime.Now
 			}), "udebug----------->");
 		}
 	}

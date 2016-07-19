@@ -1,4 +1,4 @@
-using Microsoft.Phone.Shell;
+//using Microsoft.Phone.Shell;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -47,6 +47,9 @@ namespace UmengSDK
 			}
 		}
 
+        public static string AppVersion;
+        public static string PackageName;
+        public static string ChannelName;
 		static UmengAnalytics()
 		{
 			UmengAnalytics._initSuccessed = true;
@@ -210,7 +213,7 @@ namespace UmengSDK
 		{
 			try
 			{
-				if (UmengAnalytics._initSuccessed && UmengAnalytics.IsValidInput(eventId) && kv != null && kv.get_Count() > 0)
+				if (UmengAnalytics._initSuccessed && UmengAnalytics.IsValidInput(eventId) && kv != null && kv.Count > 0)
 				{
 					UmengAnalytics._manager.AddEvent(eventId, kv);
 					DebugUtil.Log(string.Format("TrackEvent - id:{0} kv:{1}", eventId, kv.ToString()), "udebug----------->");
@@ -230,7 +233,7 @@ namespace UmengSDK
 				{
 					DebugUtil.Log(string.Format("duration can't be less than or equal to 0:{0}", duration), "udebug----------->");
 				}
-				else if (UmengAnalytics._initSuccessed && UmengAnalytics.IsValidInput(eventId) && kv != null && kv.get_Count() > 0)
+				else if (UmengAnalytics._initSuccessed && UmengAnalytics.IsValidInput(eventId) && kv != null && kv.Count > 0)
 				{
 					UmengAnalytics._manager.AddEvent(eventId, kv, duration);
 					DebugUtil.Log(string.Format("TrackEventDuration - id:{0} duration:{1} kv:{2}", eventId, duration, kv.ToString()), "udebug----------->");
@@ -265,7 +268,7 @@ namespace UmengSDK
 				if (UmengAnalytics._initSuccessed && UmengAnalytics.IsValidInput(ex))
 				{
 					UmengAnalytics._manager.AddError(ex, errMsg);
-					DebugUtil.Log(string.Format("TrackException - {0}", ex.get_Message()), "udebug----------->");
+					DebugUtil.Log(string.Format("TrackException - {0}", ex.Message), "udebug----------->");
 				}
 			}
 			catch (Exception e)
@@ -352,7 +355,7 @@ namespace UmengSDK
 		{
 			Constants.locationEnabled = enabled;
 		}
-
+        /*todo
 		private static void OnLaunching(object sender, LaunchingEventArgs e)
 		{
 			try
@@ -423,7 +426,7 @@ namespace UmengSDK
 				DebugUtil.Log(e2);
 			}
 		}
-
+        */
 		private static void SetBodyFileName()
 		{
 			string text = AppInfo.GetVersion().Replace(".", "_");
@@ -462,7 +465,7 @@ namespace UmengSDK
 					bool result = false;
 					return result;
 				}
-				if (input is string && string.IsNullOrWhiteSpace(input as string))
+				if (input is string && string.IsNullOrEmpty(input as string))
 				{
 					DebugUtil.Log("input string is null , empty or whitespace", "udebug----------->");
 					bool result = false;
@@ -479,16 +482,18 @@ namespace UmengSDK
 
 		private static bool RegisterEvents()
 		{
-			bool result;
+			bool result = false;
 			try
 			{
-				PhoneApplicationService.get_Current().add_Launching(new EventHandler<LaunchingEventArgs>(UmengAnalytics.OnLaunching));
-				PhoneApplicationService.get_Current().add_Activated(new EventHandler<ActivatedEventArgs>(UmengAnalytics.OnActivated));
-				PhoneApplicationService.get_Current().add_Deactivated(new EventHandler<DeactivatedEventArgs>(UmengAnalytics.OnDeactivated));
-				PhoneApplicationService.get_Current().add_Closing(new EventHandler<ClosingEventArgs>(UmengAnalytics.OnClosing));
-				Application.get_Current().add_UnhandledException(new EventHandler<ApplicationUnhandledExceptionEventArgs>(UmengAnalytics.Application_UnhandledException));
-				Application.get_Current().add_UnhandledException(new EventHandler<ApplicationUnhandledExceptionEventArgs>(UmengAnalytics.Current_UnhandledException));
+                /*todo
+				PhoneApplicationService.Current.add_Launching(new EventHandler<LaunchingEventArgs>(UmengAnalytics.OnLaunching));
+				PhoneApplicationService.Current.add_Activated(new EventHandler<ActivatedEventArgs>(UmengAnalytics.OnActivated));
+				PhoneApplicationService.Current.add_Deactivated(new EventHandler<DeactivatedEventArgs>(UmengAnalytics.OnDeactivated));
+				PhoneApplicationService.Current.add_Closing(new EventHandler<ClosingEventArgs>(UmengAnalytics.OnClosing));
+				Application.Current.add_UnhandledException(new EventHandler<ApplicationUnhandledExceptionEventArgs>(UmengAnalytics.Application_UnhandledException));
+				Application.Current.add_UnhandledException(new EventHandler<ApplicationUnhandledExceptionEventArgs>(UmengAnalytics.Current_UnhandledException));
 				result = true;
+                */
 			}
 			catch (Exception e)
 			{
@@ -498,9 +503,9 @@ namespace UmengSDK
 			return result;
 		}
 
-		private static void Current_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
-		{
-		}
+		//private static void Current_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
+	//	{
+	//	}
 
 		private static void OnCheckUpdateCompleted(out bool handled, Dictionary<string, object> dic)
 		{

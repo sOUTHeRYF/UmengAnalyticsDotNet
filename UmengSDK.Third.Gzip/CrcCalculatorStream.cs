@@ -47,7 +47,7 @@ namespace UmengSDK.Third.Gzip
 		{
 			get
 			{
-				return this._innerStream.get_CanRead();
+				return this._innerStream.CanRead;
 			}
 		}
 
@@ -63,7 +63,7 @@ namespace UmengSDK.Third.Gzip
 		{
 			get
 			{
-				return this._innerStream.get_CanWrite();
+				return this._innerStream.CanWrite;
 			}
 		}
 
@@ -73,7 +73,7 @@ namespace UmengSDK.Third.Gzip
 			{
 				if (this._lengthLimit == CrcCalculatorStream.UnsetLengthLimit)
 				{
-					return this._innerStream.get_Length();
+					return this._innerStream.Length;
 				}
 				return this._lengthLimit;
 			}

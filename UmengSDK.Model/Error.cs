@@ -23,10 +23,10 @@ namespace UmengSDK.Model
 			}
 			if (e != null)
 			{
-				stringBuilder.AppendLine(e.get_Message());
-				stringBuilder.AppendLine(e.get_StackTrace());
+				stringBuilder.AppendLine(e.Message);
+				stringBuilder.AppendLine(e.StackTrace);
 			}
-			base.put(this.KEY_CONTEXT, (stringBuilder.get_Length() <= 0) ? null : stringBuilder.ToString());
+			base.put(this.KEY_CONTEXT, (stringBuilder.Length <= 0) ? null : stringBuilder.ToString());
 		}
 	}
 }

@@ -4,17 +4,17 @@ using System.Runtime.Serialization;
 
 namespace UmengSDK.Business
 {
-	[DataContract]
+	//[DataContract]
 	public class OnlineParam
 	{
-		[DataMember]
+	//	[DataMember]
 		public Dictionary<string, string> Params
 		{
 			get;
 			set;
 		}
 
-		[DataMember]
+	//	[DataMember]
 		public string LastUpdateTime
 		{
 			get;

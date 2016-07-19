@@ -8,50 +8,12 @@ namespace UmengSDK.Common
 	{
 		public static string GetVersion()
 		{
-			try
-			{
-				XDocument xDocument = XDocument.Load("WMAppManifest.xml");
-				if (xDocument != null)
-				{
-					using (XmlReader xmlReader = xDocument.CreateReader(0))
-					{
-						xmlReader.ReadToDescendant("App");
-						if (xmlReader.IsStartElement())
-						{
-							return xmlReader.GetAttribute("Version");
-						}
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				DebugUtil.Log("Fail to read App version from WMAppManifest ", e);
-			}
-			return "unknown";
+            return string.IsNullOrEmpty(UmengAnalytics.AppVersion) ? "unknown" : UmengAnalytics.AppVersion;            
 		}
 
 		public static string GetProductId()
 		{
-			try
-			{
-				XDocument xDocument = XDocument.Load("WMAppManifest.xml");
-				if (xDocument != null)
-				{
-					using (XmlReader xmlReader = xDocument.CreateReader(0))
-					{
-						xmlReader.ReadToDescendant("App");
-						if (xmlReader.IsStartElement())
-						{
-							return xmlReader.GetAttribute("ProductID");
-						}
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				DebugUtil.Log("Fail to read App ProductID from WMAppManifest ", e);
-			}
-			return "unknown";
-		}
+            return string.IsNullOrEmpty(UmengAnalytics.PackageName) ? "unknown" : UmengAnalytics.PackageName;
+        }
 	}
 }
