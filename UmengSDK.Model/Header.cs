@@ -90,8 +90,9 @@ namespace UmengSDK.Model
 			base.put(this.KEY_APPKEY, Manager.AppKey);
 			base.put(this.KEY_CHANNEL, Manager.Channel);
 			base.put(this.KEY_DEVICE_ID, this.getIDMD5());
-			base.put(this.KEY_DEVICE, this.getDeviceID());
-			base.put(this.KEY_ANID2, Header.getUserID());
+            string deviceID = getDeviceID();
+            base.put(this.KEY_DEVICE, deviceID);
+			base.put(this.KEY_ANID2, string.IsNullOrEmpty(Header.getUserID())?deviceID:Header.getUserID());
 			base.put(this.KEY_DEVICE_MODEL, getComputerName());
 			this.getResolution();
 			base.put(this.KEY_SDK_TYPE, Constants.SDK_TYPE);
@@ -152,7 +153,7 @@ namespace UmengSDK.Model
 			return "1234567890";
 		}
 
-		public string getDeviceID()
+		public  string getDeviceID()
 		{
 			try
 			{
@@ -186,8 +187,9 @@ namespace UmengSDK.Model
 
 		public static string getUserID()
 		{
-            return Instance().getDeviceID();
-		}
+            return Manager.userID;
+
+        }
 
 		private void getResolution()
 		{
@@ -222,8 +224,30 @@ namespace UmengSDK.Model
 
 		private int GetDSTAdjustedTimeZone()
 		{
-            return 8;
-		}
+            int result;
+            try
+            {
+                int num = 0;
+                int.TryParse(TimeZoneInfo.Local.DisplayName.Split(new char[]
+                {
+                    ' '
+                })[0].Split(new char[]
+                {
+                    ':'
+                })[0].Substring(3), out num);
+                if (TimeZoneInfo.Local.IsDaylightSavingTime(DateTime.Now))
+                {
+                    num++;
+                }
+                result = Math.Abs(num);
+            }
+            catch (Exception ex)
+            {
+           //     Debugger.Log("Fail to read timezone (default 8) :" + ex.Message);
+                result = 8;
+            }
+            return result;
+        }
 
 		private void getNetworkType()
 		{

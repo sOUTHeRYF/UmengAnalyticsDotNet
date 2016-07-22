@@ -111,52 +111,37 @@ namespace UmengSDK.Business
 
 		private void SaveFile()
 		{
-            //todo
-            /*
 			try
 			{
 				lock (this)
 				{
-					if (OnlineParamManager._isoSettings.Contains("OnlineParams"))
-					{
-						OnlineParamManager._isoSettings.set_Item("OnlineParams", this._onlineParam);
-					}
-					else
-					{
-						OnlineParamManager._isoSettings.Add("OnlineParams", this._onlineParam);
-					}
-					OnlineParamManager._isoSettings.Save();
+                    IsoPersistentHelper.Save<OnlineParam>(this._onlineParam, "umeng_olparam");
 				}
 			}
 			catch (Exception e)
 			{
 				DebugUtil.Log("error in Save online params", e);
 			}
-            */
 		}
 
 		private bool LoadFile()
 		{
-            //todo
+  
             bool result = false;
-            /*
+  
 			try
 			{
 				lock (this)
 				{
-					if (OnlineParamManager._isoSettings.Contains("OnlineParams"))
-					{
-						this._onlineParam = (OnlineParamManager._isoSettings.get_Item("OnlineParams") as OnlineParam);
-					}
-					result = (this._onlineParam != null);
-				}
+                    OnlineParam resultObj = IsoPersistentHelper.Load<OnlineParam>("umeng_olparam");
+                    this._onlineParam = resultObj;
+                }
 			}
 			catch (Exception e)
 			{
 				DebugUtil.Log("load online params from local failed!", e);
 				result = false;
 			}
-            */
 			return result;
 		}
 

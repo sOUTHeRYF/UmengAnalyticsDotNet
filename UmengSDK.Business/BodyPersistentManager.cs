@@ -13,7 +13,7 @@ namespace UmengSDK.Business
 
 		private static readonly object lockObj = new object();
 
-		private IsolatedStorageFile _isoFile = IsolatedStorageFile.GetUserStoreForApplication();
+		private IsolatedStorageFile _isoFile = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null);
 
 		private static readonly object thislocker = new object();
 

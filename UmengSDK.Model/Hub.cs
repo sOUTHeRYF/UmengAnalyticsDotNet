@@ -28,12 +28,7 @@ namespace UmengSDK.Model
 			{
 				return;
 			}
-			if (this.hub.ContainsKey(key))
-			{
-				this.hub[key] = value;
-				return;
-			}
-			this.hub.Add(key, value);
+            this.hub[key] = value;
 		}
 
 		public object get(string key)

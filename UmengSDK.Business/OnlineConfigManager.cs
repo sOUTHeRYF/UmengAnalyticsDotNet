@@ -1,4 +1,6 @@
 using System;
+using System.Text;
+using System.IO;
 using System.Collections.Generic;
 using System.IO.IsolatedStorage;
 using System.Runtime.Serialization;
@@ -64,7 +66,7 @@ namespace UmengSDK.Business
 
 		public const string KEY_REPORT_INTERVAL = "report_interval";
 
-	//	private IsolatedStorageSettings _isoSettings = IsolatedStorageSettings.get_ApplicationSettings();
+        private Dictionary<string, object> _isoSettings = new Dictionary<string, object>();
 
 		private static readonly object synObj = new object();
 
@@ -217,17 +219,10 @@ namespace UmengSDK.Business
 			{
 				lock (this)
 				{
-                    /*Todo
-					if (this._isoSettings.Contains("config"))
-					{
-						this._isoSettings.set_Item("config", this._config);
-					}
-					else
-					{
-						this._isoSettings.Add("config", this._config);
-					}
-					this._isoSettings.Save();
-                    */
+                    if (null != this._config)
+                    {
+                        IsoPersistentHelper.Save<OnlineConfig>(this._config, "umeng_olconfig");
+                    }     
 				}
 			}
 			catch (Exception e)
@@ -243,14 +238,9 @@ namespace UmengSDK.Business
 			{
 				lock (this)
 				{
-                    /*Todo
-					if (this._isoSettings.Contains("config"))
-					{
-						this._config = (this._isoSettings.get_Item("config") as OnlineConfigManager.OnlineConfig);
-					}
-					result = (this._config != null);
-                    */
-				}
+                    OnlineConfig resultObj = IsoPersistentHelper.Load<OnlineConfig>("umeng_olconfig");
+                    this._config = resultObj;
+                }
 			}
 			catch (Exception e)
 			{

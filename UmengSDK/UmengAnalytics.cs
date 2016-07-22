@@ -47,9 +47,6 @@ namespace UmengSDK
 			}
 		}
 
-        public static string AppVersion;
-        public static string PackageName;
-        public static string ChannelName;
 		static UmengAnalytics()
 		{
 			UmengAnalytics._initSuccessed = true;
@@ -72,7 +69,7 @@ namespace UmengSDK
 			}
 		}
 
-		public static void Init(string appkey, string channel = "Marketplace")
+		public static void Init(string appkey, string packageName,string appVersion,string userID = "",string channel = "Steam")
 		{
 			try
 			{
@@ -89,6 +86,9 @@ namespace UmengSDK
 							channel = channel.CheckInput(UmengAnalytics.MAX_LENGTH_30);
 							Manager.Channel = channel;
 						}
+                        Manager.packageName = packageName;
+                        Manager.appVersion = appVersion;
+                        Manager.userID = userID;           
 						Manager.AppKey = appkey;
 						UmengSettings.Load();
 						UmengAnalytics.RegisterEvents();
@@ -102,7 +102,15 @@ namespace UmengSDK
 				DebugUtil.Log("Umeng SDK init failed!", e);
 			}
 		}
-
+        public static void StartTrack()
+        {
+            UpdateOnlineParamAsync();
+            OnLaunching();
+        }
+        public static void EndTrack()
+        {
+            OnClosing();
+        }
 		public static void TrackPageStart(string pageName)
 		{
 			try
@@ -355,8 +363,8 @@ namespace UmengSDK
 		{
 			Constants.locationEnabled = enabled;
 		}
-        /*todo
-		private static void OnLaunching(object sender, LaunchingEventArgs e)
+
+		private static void OnLaunching()
 		{
 			try
 			{
@@ -370,36 +378,8 @@ namespace UmengSDK
 			}
 		}
 
-		private static void OnActivated(object source, ActivatedEventArgs e)
-		{
-			try
-			{
-				bool arg_06_0 = e.get_IsApplicationInstancePreserved();
-				UmengAnalytics.SetBodyFileName();
-				UmengAnalytics._manager.OnResume();
-				DebugUtil.Log("OnActivated Completed", "udebug----------->");
-			}
-			catch (Exception e2)
-			{
-				DebugUtil.Log("OnActivated failed!", e2);
-			}
-		}
 
-		private static void OnDeactivated(object source, DeactivatedEventArgs e)
-		{
-			try
-			{
-				UmengAnalytics._manager.OnPause();
-				UmengSettings.Save();
-				DebugUtil.Log("OnDeactivated Completed", "udebug----------->");
-			}
-			catch (Exception e2)
-			{
-				DebugUtil.Log("OnDeactivated failed!", e2);
-			}
-		}
-
-		private static void OnClosing(object source, ClosingEventArgs e)
+		private static void OnClosing()
 		{
 			try
 			{
@@ -413,12 +393,11 @@ namespace UmengSDK
 			}
 		}
 
-		private static void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
+		private static void Application_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
 			try
 			{
-				e.set_Handled(false);
-				UmengAnalytics._manager.DoneAppError(e.get_ExceptionObject());
+				UmengAnalytics._manager.DoneAppError((Exception)e.ExceptionObject);
 				UmengSettings.Save();
 			}
 			catch (Exception e2)
@@ -426,7 +405,7 @@ namespace UmengSDK
 				DebugUtil.Log(e2);
 			}
 		}
-        */
+
 		private static void SetBodyFileName()
 		{
 			string text = AppInfo.GetVersion().Replace(".", "_");
@@ -485,16 +464,18 @@ namespace UmengSDK
 			bool result = false;
 			try
 			{
+                System.AppDomain.CurrentDomain.UnhandledException += Application_UnhandledException;
                 /*todo
 				PhoneApplicationService.Current.add_Launching(new EventHandler<LaunchingEventArgs>(UmengAnalytics.OnLaunching));
 				PhoneApplicationService.Current.add_Activated(new EventHandler<ActivatedEventArgs>(UmengAnalytics.OnActivated));
 				PhoneApplicationService.Current.add_Deactivated(new EventHandler<DeactivatedEventArgs>(UmengAnalytics.OnDeactivated));
 				PhoneApplicationService.Current.add_Closing(new EventHandler<ClosingEventArgs>(UmengAnalytics.OnClosing));
+
 				Application.Current.add_UnhandledException(new EventHandler<ApplicationUnhandledExceptionEventArgs>(UmengAnalytics.Application_UnhandledException));
 				Application.Current.add_UnhandledException(new EventHandler<ApplicationUnhandledExceptionEventArgs>(UmengAnalytics.Current_UnhandledException));
 				result = true;
                 */
-			}
+            }
 			catch (Exception e)
 			{
 				DebugUtil.Log("RegisterEvents failed", e);
@@ -502,12 +483,11 @@ namespace UmengSDK
 			}
 			return result;
 		}
+        //private static void Current_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
+        //	{
+        //	}
 
-		//private static void Current_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
-	//	{
-	//	}
-
-		private static void OnCheckUpdateCompleted(out bool handled, Dictionary<string, object> dic)
+        private static void OnCheckUpdateCompleted(out bool handled, Dictionary<string, object> dic)
 		{
 			try
 			{

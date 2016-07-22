@@ -194,7 +194,7 @@ namespace UmengSDK.Model
 			}
 		}
 
-		public Dictionary<string, object> ToDictionary()
+		public new Dictionary<string, object> ToDictionary()
 		{
 			Dictionary<string, object> result;
 			lock (this)

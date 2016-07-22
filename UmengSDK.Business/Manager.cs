@@ -17,6 +17,10 @@ namespace UmengSDK.Business
 
 		private static string _sessionId = null;
 
+        public static string userID = "";
+        public static string appVersion = "1.0.0.0";
+        public static string packageName = "";
+
 		private ITracker _messageTracker;
 
 		private Body _localSendingBody;

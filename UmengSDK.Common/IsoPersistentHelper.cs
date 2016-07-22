@@ -8,7 +8,7 @@ namespace UmengSDK.Common
 	{
 		public static void Save<T>(this T obj, string file)
 		{
-			IsolatedStorageFile userStoreForApplication = IsolatedStorageFile.GetUserStoreForApplication();
+			IsolatedStorageFile userStoreForApplication = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null); 
 			IsolatedStorageFileStream isolatedStorageFileStream = null;
 			try
 			{
@@ -31,7 +31,7 @@ namespace UmengSDK.Common
         public static bool FileExists(string name)
         {
             bool result = false;
-            IsolatedStorageFile file = IsolatedStorageFile.GetUserStoreForApplication();
+            IsolatedStorageFile file = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null);
             String[] fileNames = file.GetFileNames("*");
             foreach (string index in fileNames)
             {
@@ -46,8 +46,8 @@ namespace UmengSDK.Common
 		public static T Load<T>(string file)
 		{
 			T result = default(T);
-			IsolatedStorageFile userStoreForApplication = IsolatedStorageFile.GetUserStoreForApplication();
-			if (FileExists(file))
+			IsolatedStorageFile userStoreForApplication = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null);
+            if (FileExists(file))
 			{
 				IsolatedStorageFileStream isolatedStorageFileStream = null;
 				try
@@ -73,8 +73,8 @@ namespace UmengSDK.Common
 
 		public static void Delete(string file)
 		{
-			IsolatedStorageFile userStoreForApplication = IsolatedStorageFile.GetUserStoreForApplication();
-			try
+			IsolatedStorageFile userStoreForApplication = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null);
+            try
 			{
 				if (FileExists(file))
 				{
