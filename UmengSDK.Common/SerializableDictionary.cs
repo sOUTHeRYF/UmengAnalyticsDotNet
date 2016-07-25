@@ -44,7 +44,12 @@ namespace UmengSDK.Common
 				base.Add(tKey, tValue);
 				reader.MoveToContent();
 			}
-			reader.ReadEndElement();
+            try
+            {
+                reader.ReadEndElement();
+            }
+            catch (Exception)
+            { }
 		}
 
 		public XmlSchema GetSchema()

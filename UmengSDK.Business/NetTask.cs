@@ -64,6 +64,7 @@ namespace UmengSDK.Business
 		{
 			this._retryTime = 0;
 			this._message = MessageBuilder.buildLogMessage(launch, terminate, body);
+            DebugUtil.Log("AAAA"+this._message);
 			this._send_url = Constants.SEND_LOG_URL;
 			this._isCompressed = true;
 		}
@@ -95,10 +96,10 @@ namespace UmengSDK.Business
 			httpWebRequest.Method = "POST";
 			httpWebRequest.ContentType ="application/x-www-form-urlencoded";
 			httpWebRequest.Headers["X-Umeng-Sdk"] = "windowsphone/1.0";
-			if (this._isCompressed)
-			{
-				httpWebRequest.Headers["Content-Encoding"] = "gzip";
-			}
+	//todo		if (this._isCompressed)
+		//	{
+		//		httpWebRequest.Headers["Content-Encoding"] = "gzip";
+		//	}
 			httpWebRequest.BeginGetRequestStream(new AsyncCallback(this.RequestReady), httpWebRequest);
 		}
 
@@ -110,7 +111,7 @@ namespace UmengSDK.Business
 				{
 					Thread.CurrentThread.Name = "UmengNetTask";
 					HttpWebRequest httpWebRequest = asyncResult.AsyncState as HttpWebRequest;
-					if (this._isCompressed)
+					if (this._isCompressed && false)
 					{
 						using (Stream stream = httpWebRequest.EndGetRequestStream(asyncResult))
 						{

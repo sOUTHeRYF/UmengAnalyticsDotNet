@@ -34,30 +34,35 @@ namespace UmengSDK.Business
 				return BodyPersistentManager._current;
 			}
 		}
-
-		public bool HasCache
+        public static bool FileExists(string name)
+        {
+            bool result = false;
+            IsolatedStorageFileStream isolatedStorageFileStream = null;
+            try
+            {
+                isolatedStorageFileStream = new IsolatedStorageFileStream(name, System.IO.FileMode.Open);
+                result =  isolatedStorageFileStream.Length > 5;
+            }
+            catch (Exception e)
+            {
+                result = false;
+            }
+            finally
+            {
+                if (null != isolatedStorageFileStream)
+                {
+                    isolatedStorageFileStream.Close();
+                    isolatedStorageFileStream.Dispose();
+                }
+            }
+            return result;
+        }
+        public bool HasCache
 		{
-			get
-			{
-                bool result = false;
-				try
-				{
-                    string[] results = _isoFile.GetFileNames("*");
-                    foreach (string index in results)
-                    {
-                        if (index.CompareTo(this.FileName) == 0)
-                        {
-                            result = true;
-                            break;
-                        }
-                    }
-				}
-				catch (Exception)
-				{
-					result = false;
-				}
-				return result;
-			}
+            get
+            {
+                return FileExists(this.FileName);
+            }
 		}
 
 		public Body LocalBody
@@ -146,7 +151,27 @@ namespace UmengSDK.Business
 				{
 					if (this.HasCache)
 					{
-						this._isoFile.DeleteFile(this.FileName);
+                        IsolatedStorageFileStream isolatedStorageFileStream = null;
+                        try
+                        {
+                            isolatedStorageFileStream = new IsolatedStorageFileStream(this.FileName, System.IO.FileMode.Open);
+                            using (StreamWriter streamWriter = new StreamWriter(isolatedStorageFileStream))
+                            {
+                                streamWriter.Write("y");
+                            }
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                        finally
+                        {
+                            if (null != isolatedStorageFileStream)
+                            {
+                                isolatedStorageFileStream.Close();
+                                isolatedStorageFileStream.Dispose();
+                            }
+                        }
 						DebugUtil.Log("delete cached message successed!", "udebug----------->");
 					}
 					else

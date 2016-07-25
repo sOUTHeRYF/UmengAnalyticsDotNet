@@ -465,16 +465,8 @@ namespace UmengSDK
 			try
 			{
                 System.AppDomain.CurrentDomain.UnhandledException += Application_UnhandledException;
-                /*todo
-				PhoneApplicationService.Current.add_Launching(new EventHandler<LaunchingEventArgs>(UmengAnalytics.OnLaunching));
-				PhoneApplicationService.Current.add_Activated(new EventHandler<ActivatedEventArgs>(UmengAnalytics.OnActivated));
-				PhoneApplicationService.Current.add_Deactivated(new EventHandler<DeactivatedEventArgs>(UmengAnalytics.OnDeactivated));
-				PhoneApplicationService.Current.add_Closing(new EventHandler<ClosingEventArgs>(UmengAnalytics.OnClosing));
-
-				Application.Current.add_UnhandledException(new EventHandler<ApplicationUnhandledExceptionEventArgs>(UmengAnalytics.Application_UnhandledException));
-				Application.Current.add_UnhandledException(new EventHandler<ApplicationUnhandledExceptionEventArgs>(UmengAnalytics.Current_UnhandledException));
-				result = true;
-                */
+                result = true;
+  
             }
 			catch (Exception e)
 			{

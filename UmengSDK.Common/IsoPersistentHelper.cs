@@ -31,15 +31,23 @@ namespace UmengSDK.Common
         public static bool FileExists(string name)
         {
             bool result = false;
-            IsolatedStorageFile file = IsolatedStorageFile.GetStore(IsolatedStorageScope.User | IsolatedStorageScope.Assembly, null, null);
-            String[] fileNames = file.GetFileNames("*");
-            foreach (string index in fileNames)
+            IsolatedStorageFileStream isolatedStorageFileStream = null;
+            try
             {
-                if (index.CompareTo(name) == 0)
+                isolatedStorageFileStream = new IsolatedStorageFileStream(name, System.IO.FileMode.Open);
+                result = true;
+            }
+            catch (Exception e)
+            {
+                result = false;
+            }
+            finally
+            {
+                if (null != isolatedStorageFileStream)
                 {
-                    result = true;
-                    break;
-                }             
+                    isolatedStorageFileStream.Close();
+                    isolatedStorageFileStream.Dispose();
+                }
             }
             return result;
         }

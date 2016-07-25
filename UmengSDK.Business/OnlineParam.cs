@@ -2,28 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
+using UmengSDK.Common;
 namespace UmengSDK.Business
 {
 	//[DataContract]
 	public class OnlineParam
 	{
-	//	[DataMember]
-		public Dictionary<string, string> Params
-		{
-			get;
-			set;
-		}
-
-	//	[DataMember]
-		public string LastUpdateTime
-		{
-			get;
-			set;
-		}
+        //	[DataMember]
+        public SerializableDictionary<string, string> Params;
+ //       public Dictionary<string, string> Params;
+        //	[DataMember]
+        public string LastUpdateTime;
 
 		public OnlineParam()
 		{
-			this.Params = new Dictionary<string, string>();
+			this.Params = new SerializableDictionary<string, string>();
+            this.LastUpdateTime = string.Empty;
 		}
 	}
 }

@@ -120,6 +120,7 @@ namespace UmengSDK.Model
         }
 		private string getIDMD5()
 		{
+         //   return "1234567895461245";
 			try
 			{
 				string text = UmengSettings.Get<string>(this.KEY_DEVICE_ID, null);
@@ -155,7 +156,9 @@ namespace UmengSDK.Model
 
 		public  string getDeviceID()
 		{
-			try
+       //     return "1234567895461245";
+
+            try
 			{
 				string text = UmengSettings.Get<string>(this.KEY_DEVICE, null);
 				if (string.IsNullOrEmpty(text))
