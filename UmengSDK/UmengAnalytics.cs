@@ -9,9 +9,9 @@ namespace UmengSDK
 {
 	public class UmengAnalytics
 	{
-		public delegate void UpdateEventHandler(int statusCode, UpdateEventArgs e);
+		private delegate void UpdateEventHandler(int statusCode, UpdateEventArgs e);
 
-		public delegate void OnlineParamHandler(int statusCode, OnlineParamEventArgs e);
+		private delegate void OnlineParamHandler(int statusCode, OnlineParamEventArgs e);
 
 		private static bool _initSuccessed;
 
@@ -23,11 +23,11 @@ namespace UmengSDK
 
 		private static readonly OnlineParamManager _onlineParamMgr;
 
-		public static event UmengAnalytics.UpdateEventHandler CheckUpdateCompleted;
+		private static event UmengAnalytics.UpdateEventHandler CheckUpdateCompleted;
 
-		public static event UmengAnalytics.OnlineParamHandler UpdateOnlineParamCompleted;
+		private static event UmengAnalytics.OnlineParamHandler UpdateOnlineParamCompleted;
 
-		public static string NumberKey
+		private static string NumberKey
 		{
 			get
 			{
@@ -68,7 +68,14 @@ namespace UmengSDK
 				DebugUtil.Log("UmengAnalytics constructor failed!", e);
 			}
 		}
-
+        /// <summary>
+        /// 初始化SDK
+        /// </summary>
+        /// <param name="appkey">后台申请的AppKey</param>
+        /// <param name="packageName">包名，游戏唯一性</param>
+        /// <param name="appVersion">版本，用于后台区分，格式为1.2.3.4</param>
+        /// <param name="userID">用户ID，为空则使用设备ID</param>
+        /// <param name="channel">渠道，为空则使用"Steam"</param>
 		public static void Init(string appkey, string packageName,string appVersion,string userID = "",string channel = "Steam")
 		{
 			try
@@ -81,11 +88,15 @@ namespace UmengSDK
 					}
 					else
 					{
-						if (!string.IsNullOrEmpty(channel))
-						{
-							channel = channel.CheckInput(UmengAnalytics.MAX_LENGTH_30);
-							Manager.Channel = channel;
-						}
+                        if (!string.IsNullOrEmpty(channel))
+                        {
+                            channel = channel.CheckInput(UmengAnalytics.MAX_LENGTH_30);
+                            Manager.Channel = channel;
+                        }
+                        else
+                        {
+                            Manager.Channel = "Steam";
+                        }
                         Manager.packageName = packageName;
                         Manager.appVersion = appVersion;
                         Manager.userID = userID;           
@@ -111,7 +122,7 @@ namespace UmengSDK
         {
             OnClosing();
         }
-		public static void TrackPageStart(string pageName)
+		private static void TrackPageStart(string pageName)
 		{
 			try
 			{
@@ -128,7 +139,7 @@ namespace UmengSDK
 			}
 		}
 
-		public static void TrackPageEnd(string pageName)
+		private static void TrackPageEnd(string pageName)
 		{
 			try
 			{
@@ -253,7 +264,7 @@ namespace UmengSDK
 			}
 		}
 
-		public static void TrackError(string error)
+		private static void TrackError(string error)
 		{
 			try
 			{
@@ -306,7 +317,7 @@ namespace UmengSDK
 
 		public static string GetOnlineParam(string key)
 		{
-			string result;
+            string result = string.Empty;
 			try
 			{
 				if (UmengAnalytics._onlineParamMgr != null && UmengAnalytics.IsValidInput(key))
@@ -326,7 +337,7 @@ namespace UmengSDK
 			return result;
 		}
 
-		public static void CheckUpdateAsync()
+		private static void CheckUpdateAsync()
 		{
 			try
 			{
@@ -345,13 +356,13 @@ namespace UmengSDK
 			}
 		}
 
-		public static void SetSessionInterval(long seconds)
+		private static void SetSessionInterval(long seconds)
 		{
 			Constants.SessionInterval = seconds;
 			DebugUtil.Log(string.Format("Session Interval changed to {0}s", seconds), "udebug----------->");
 		}
 
-		public static void DoneAppTerminate()
+		private static void DoneAppTerminate()
 		{
 			if (UmengAnalytics._manager != null)
 			{
